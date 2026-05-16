@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr MOCK — Free CUET Mock Tests</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0f;
+  --surface: #16161a;
+  --surface2: #1e1e24;
+  --border: #2a2a35;
+  --purple: #7c6ff7;
+  --purple-dim: #3d3a7a;
+  --purple-glow: rgba(124,111,247,0.15);
+  --green: #3ecf8e;
+  --green-dim: #1a4a36;
+  --red: #f06565;
+  --red-dim: #4a1f1f;
+  --amber: #f0a940;
+  --amber-dim: #4a3010;
+  --text: #e8e8f0;
+  --muted: #7a7a8a;
+  --subtle: #3a3a48;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* NAV */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px; border-bottom: 1px solid var(--border);
+  background: var(--surface); position: sticky; top: 0; z-index: 10;
+}
+.nav-logo { font-size: 17px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.nav-logo .dot { color: var(--purple); }
+.nav-badge { font-size: 11px; background: var(--purple-glow); color: var(--purple); border: 1px solid var(--purple-dim); padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; }
+.timer-pill {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500;
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 8px; color: var(--text);
+  transition: color 0.3s, border-color 0.3s;
+}
+.timer-pill.warn { color: var(--red); border-color: var(--red-dim); }
+.timer-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 1s infinite; }
+.timer-pill.warn .timer-dot { background: var(--red); }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* HOME SCREEN */
+.home-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+.home-tag { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--purple); background: var(--purple-glow); border: 1px solid var(--purple-dim); padding: 4px 14px; border-radius: 20px; margin-bottom: 24px; letter-spacing: 0.05em; }
+.home-title { font-size: clamp(28px, 5vw, 42px); font-weight: 600; text-align: center; line-height: 1.2; max-width: 520px; margin-bottom: 14px; }
+.home-title span { color: var(--purple); }
+.home-sub { font-size: 15px; color: var(--muted); text-align: center; max-width: 400px; line-height: 1.7; margin-bottom: 36px; }
+
+.subj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; width: 100%; max-width: 680px; margin-bottom: 28px; }
+.subj-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-align: left;
+}
+.subj-card:hover { border-color: var(--purple-dim); background: var(--surface2); }
+.subj-card.selected { border-color: var(--purple); background: var(--purple-glow); }
+.subj-icon { font-size: 22px; margin-bottom: 10px; }
+.subj-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.subj-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.subj-meta { margin-top: 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--purple); }
+
+.info-chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
+.chip { font-size: 12px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
+
+.btn-start {
+  background: var(--purple); color: #fff; border: none;
+  padding: 14px 40px; border-radius: 10px; font-size: 15px;
+  font-weight: 600; cursor: pointer; font-family: 'Sora', sans-serif;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn-start:hover { opacity: 0.9; }
+.btn-start:active { transform: scale(0.98); }
+
+/* TEST SCREEN */
+.test-body { flex: 1; display: grid; grid-template-columns: 1fr 260px; gap: 0; max-width: 960px; margin: 0 auto; width: 100%; padding: 20px; gap: 16px; }
+@media(max-width: 680px) { .test-body { grid-template-columns: 1fr; } .palette-panel { order: -1; } }
+
+.main-col { display: flex; flex-direction: column; gap: 14px; }
+
+.progress-bar-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.progress-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+.pbar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.pbar-fill { height: 100%; background: var(--purple); border-radius: 3px; transition: width 0.4s; }
+
+.qcard { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+.qcard-num { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--purple); margin-bottom: 12px; }
+.qcard-text { font-size: 15px; color: var(--text); line-height: 1.7; margin-bottom: 20px; }
+
+.opts { display: flex; flex-direction: column; gap: 8px; }
+.opt {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px;
+  cursor: pointer; background: transparent; text-align: left;
+  font-family: 'Sora', sans-serif; font-size: 14px; color: var(--text);
+  width: 100%; transition: border-color 0.15s, background 0.15s;
+}
+.opt:hover { border-color: var(--purple-dim); background: var(--purple-glow); }
+.opt.selected { border-color: var(--purple); background: var(--purple-glow); color: var(--text); }
+.opt.correct { border-color: var(--green); background: rgba(62,207,142,0.1); color: var(--green); }
+.opt.wrong { border-color: var(--red); background: rgba(240,101,101,0.1); color: var(--red); }
+.opt-key {
+  width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0; background: var(--surface2); color: var(--muted);
+  transition: all 0.15s;
+}
+.opt.selected .opt-key { background: var(--purple); border-color: var(--purple); color: #fff; }
+.opt.correct .opt-key { background: var(--green); border-color: var(--green); color: #000; }
+.opt.wrong .opt-key { background: var(--red); border-color: var(--red); color: #fff; }
+
+.nav-btns { display: flex; gap: 8px; justify-content: space-between; }
+.btn { padding: 9px 18px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; font-family: 'Sora', sans-serif; font-size: 13px; transition: background 0.15s; }
+.btn:hover { background: var(--surface2); }
+.btn-p { background: var(--purple); color: #fff; border-color: var(--purple); }
+.btn-p:hover { opacity: 0.9; }
+.btn-danger { background: rgba(240,101,101,0.15); color: var(--red); border-color: var(--red-dim); }
+.btn-danger:hover { background: rgba(240,101,101,0.25); }
+
+/* PALETTE PANEL */
+.palette-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; align-self: start; position: sticky; top: 80px; }
+.panel-title { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--muted); margin-bottom: 12px; letter-spacing: 0.05em; }
+.palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 14px; }
+.pq {
+  aspect-ratio: 1; border-radius: 6px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); font-size: 12px;
+  font-family: 'JetBrains Mono', monospace; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.pq:hover { border-color: var(--purple-dim); color: var(--text); }
+.pq.ans { background: rgba(62,207,142,0.15); border-color: var(--green); color: var(--green); }
+.pq.curr { background: var(--purple-glow); border-color: var(--purple); color: var(--purple); font-weight: 600; }
+.pq.skip { background: rgba(240,169,64,0.15); border-color: var(--amber); color: var(--amber); }
+
+.legend { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+.submit-btn-panel { width: 100%; padding: 10px; border-radius: 8px; background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,101,101,0.3); cursor: pointer; font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 500; transition: background 0.15s; }
+.submit-btn-panel:hover { background: rgba(240,101,101,0.25); }
+
+/* RESULT SCREEN */
+.result-body { flex: 1; max-width: 680px; margin: 0 auto; width: 100%; padding: 24px 20px; }
+.result-header { margin-bottom: 24px; }
+.result-title { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.result-sub { font-size: 13px; color: var(--muted); }
+
+.score-big { text-align: center; padding: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 16px; }
+.score-num { font-size: 56px; font-weight: 600; font-family: 'JetBrains Mono', monospace; color: var(--purple); line-height: 1; margin-bottom: 6px; }
+.score-max { font-size: 14px; color: var(--muted); margin-bottom: 16px; }
+.acc-bar-wrap { max-width: 300px; margin: 0 auto; }
+.acc-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.acc-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.acc-fill { height: 100%; background: var(--purple); border-radius: 3px; transition: width 1.2s ease; }
+
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-align: center; }
+.stat-val { font-size: 24px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.stat.g .stat-val { color: var(--green); }
+.stat.r .stat-val { color: var(--red); }
+.stat.a .stat-val { color: var(--amber); }
+
+.review-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--text); }
+.review-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.rq { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+.rq-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.rq-q { font-size: 13px; color: var(--text); line-height: 1.5; flex: 1; }
+.rbadge { font-size: 11px; padding: 2px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+.rbadge.c { background: rgba(62,207,142,0.15); color: var(--green); }
+.rbadge.w { background: rgba(240,101,101,0.15); color: var(--red); }
+.rbadge.s { background: rgba(240,169,64,0.15); color: var(--amber); }
+.rq-ans { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.rq-ans span.correct { color: var(--green); }
+.rq-ans span.wrong { color: var(--red); }
+.rq-exp { font-size: 12px; color: var(--muted); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 6px; }
+
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.action-row .btn { flex: 1; padding: 12px; text-align: center; font-size: 14px; }
+.btn-outline-p { border-color: var(--purple-dim); color: var(--purple); }
+.btn-outline-p:hover { background: var(--purple-glow); }
+</style>
+</head>
+<body>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen" class="screen active">
+  <nav>
+    <div class="nav-logo">Mr <span class="dot">MOCK</span></div>
+    <div class="nav-badge">CUET MOCK TESTS</div>
+  </nav>
+  <div class="home-body">
+    <div class="home-tag">&#9679; India ka Best CUET Mock Test Platform</div>
+    <h1 class="home-title">Mr MOCK ke saath <span>CUET Crack Karo</span></h1>
+    <p class="home-sub">Real exam pattern, timed questions, detailed score analysis — ghar baithe practice karo aur topper bano.</p>
+
+    <div class="subj-grid">
+      <div class="subj-card selected" onclick="selectSubj(this,'general')">
+        <div class="subj-icon">🧠</div>
+        <div class="subj-name">General Test</div>
+        <div class="subj-desc">GK, Current Affairs, Reasoning, Quantitative</div>
+        <div class="subj-meta">10 Qs · Free</div>
+      </div>
+      <div class="subj-card" onclick="selectSubj(this,'english')">
+        <div class="subj-icon">📝</div>
+        <div class="subj-name">English Language</div>
+        <div class="subj-desc">Grammar, Vocabulary, Reading Comprehension</div>
+        <div class="subj-meta">10 Qs · Free</div>
+      </div>
+      <div class="subj-card" onclick="selectSubj(this,'maths')">
+        <div class="subj-icon">🔢</div>
+        <div class="subj-name">Mathematics</div>
+        <div class="subj-desc">Class 12 level, Arithmetic, Algebra, Geometry</div>
+        <div class="subj-meta">10 Qs · Free</div>
+      </div>
+    </div>
+
+    <div class="info-chips">
+      <div class="chip">⏱ 10 Minutes</div>
+      <div class="chip">❓ 10 Questions</div>
+      <div class="chip">✅ +5 Sahi jawab</div>
+      <div class="chip">❌ −1 Galat jawab</div>
+    </div>
+    <button class="btn-start" onclick="startTest()">Test Shuru Karo →</button>
+  </div>
+</div>
+
+<!-- TEST SCREEN -->
+<div id="testScreen" class="screen">
+  <nav>
+    <div class="nav-logo">Mr <span class="dot">MOCK</span></div>
+    <div class="timer-pill" id="timerPill"><span class="timer-dot"></span><span id="timerDisplay">10:00</span></div>
+  </nav>
+  <div class="test-body">
+    <div class="main-col">
+      <div class="progress-bar-wrap">
+        <div class="progress-meta">
+          <span id="progLabel">Question 1 of 10</span>
+          <span id="progPct">10%</span>
+        </div>
+        <div class="pbar"><div class="pbar-fill" id="pbarFill" style="width:10%"></div></div>
+      </div>
+      <div class="qcard">
+        <div class="qcard-num" id="qNum">Q01 / 10</div>
+        <div class="qcard-text" id="qText"></div>
+        <div class="opts" id="optsContainer"></div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn" onclick="prevQ()">← Pehla</button>
+        <button class="btn" onclick="skipQ()" style="color:var(--amber);border-color:var(--amber-dim)">Skip</button>
+        <button class="btn btn-p" onclick="nextQ()">Agla →</button>
+      </div>
+    </div>
+    <div class="palette-panel">
+      <div class="panel-title">QUESTION NAVIGATOR</div>
+      <div class="palette" id="paletteBtns"></div>
+      <div class="legend">
+        <div class="legend-item"><div class="leg-dot" style="background:var(--green);opacity:0.6"></div>Attempt kiya</div>
+        <div class="legend-item"><div class="leg-dot" style="background:var(--purple);opacity:0.6"></div>Current</div>
+        <div class="legend-item"><div class="leg-dot" style="background:var(--amber);opacity:0.6"></div>Skip</div>
+        <div class="legend-item"><div class="leg-dot" style="background:var(--border)"></div>Baaki</div>
+      </div>
+      <button class="submit-btn-panel" onclick="confirmSubmit()">⏹ Test Submit Karo</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="screen">
+  <nav>
+    <div class="nav-logo">Mr <span class="dot">MOCK</span></div>
+    <button class="btn btn-outline-p" onclick="goHome()" style="border-color:var(--purple-dim);color:var(--purple);padding:7px 16px;border-radius:8px;background:transparent;cursor:pointer;font-family:'Sora',sans-serif;font-size:13px">Naya Test</button>
+  </nav>
+  <div class="result-body">
+    <div class="result-header">
+      <div class="result-title">Test Complete! 🎉</div>
+      <div class="result-sub" id="resultSubLabel"></div>
+    </div>
+    <div class="score-big">
+      <div class="score-num" id="rScoreNum">0</div>
+      <div class="score-max" id="rScoreMax">out of 50 marks</div>
+      <div class="acc-bar-wrap">
+        <div class="acc-label"><span>Accuracy</span><span id="rAccPct">0%</span></div>
+        <div class="acc-bar"><div class="acc-fill" id="rAccBar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat g"><div class="stat-val" id="rCorrect">0</div><div class="stat-lbl">Sahi jawab</div></div>
+      <div class="stat r"><div class="stat-val" id="rWrong">0</div><div class="stat-lbl">Galat jawab</div></div>
+      <div class="stat a"><div class="stat-val" id="rSkip">0</div><div class="stat-lbl">Skip</div></div>
+    </div>
+    <div class="review-title">Question-wise Review</div>
+    <div class="review-list" id="reviewList"></div>
+    <div class="action-row">
+      <button class="btn" onclick="goHome()" style="border-color:var(--border);color:var(--muted)">← Wapas Jao</button>
+      <button class="btn btn-p" onclick="shareScore()">Score Share Karo ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QB = {
+  general:[
+    {q:"Bharat ka pehla Prime Minister kaun tha?",opts:["Sardar Patel","Jawaharlal Nehru","Rajendra Prasad","B.R. Ambedkar"],ans:1,exp:"Jawaharlal Nehru bharat ke pehle Prime Minister the, jo 1947 se 1964 tak is pad par rahe."},
+    {q:"'Satyamev Jayate' kahan se liya gaya hai?",opts:["Rigveda","Bhagavad Gita","Mundaka Upanishad","Arthashastra"],ans:2,exp:"Yeh vakya Mundaka Upanishad se liya gaya hai aur bharat ka rashtriya motto hai."},
+    {q:"Bharat mein Rajya Sabha mein kitni seaten hain (maximum)?",opts:["245","250","238","260"],ans:0,exp:"Rajya Sabha mein maximum 250 seats hain — 238 elected aur 12 President dwara nominated."},
+    {q:"'Pawan Putra' kise kaha jata hai?",opts:["Arjun","Bheem","Hanuman","Karna"],ans:2,exp:"Hanuman ji ko Pawan Putra (vayu devta ke putra) kaha jata hai."},
+    {q:"Bharat ki pehli mahila IPS officer kaun thi?",opts:["Kiran Bedi","Sushma Swaraj","Pratibha Patil","Indira Gandhi"],ans:0,exp:"Kiran Bedi 1972 mein bharat ki pehli mahila IPS officer bani thi."},
+    {q:"Agar ek train 60 km/h ki speed se 2 ghante chalti hai, kitni doori tay karegi?",opts:["90 km","100 km","120 km","150 km"],ans:2,exp:"Distance = Speed × Time = 60 × 2 = 120 km."},
+    {q:"'Sare Jahan Se Achha' kis ne likha tha?",opts:["Rabindranath Tagore","Muhammad Iqbal","Bankim Chandra","Faiz Ahmad Faiz"],ans:1,exp:"Yeh tarana Muhammad Iqbal ne 1904 mein likha tha."},
+    {q:"Bharat mein kitne High Courts hain (2024)?",opts:["21","25","24","28"],ans:1,exp:"Bharat mein 2024 tak 25 High Courts hain."},
+    {q:"Series: 2, 6, 12, 20, 30, ? — agla number kya hoga?",opts:["40","42","44","48"],ans:1,exp:"Pattern: n×(n+1) — 1×2=2, 2×3=6, 3×4=12, 4×5=20, 5×6=30, 6×7=42."},
+    {q:"Bharat ka national fruit kaun sa hai?",opts:["Kela","Aam","Amrud","Nashpati"],ans:1,exp:"Aam (Mangifera indica) bharat ka rashtriya fal hai."}
+  ],
+  english:[
+    {q:"Choose the correct sentence:",opts:["She don't know the answer.","She doesn't knows the answer.","She doesn't know the answer.","She not know the answer."],ans:2,exp:"Third person singular (she/he/it) ke saath 'doesn't' + base verb use hota hai."},
+    {q:"Synonym of 'Eloquent':",opts:["Silent","Fluent and persuasive","Angry","Confused"],ans:1,exp:"Eloquent ka matlab hai — clear, expressive, aur persuasive speech."},
+    {q:"Fill in the blank: 'He is good ___ mathematics.'",opts:["in","at","on","for"],ans:1,exp:"'Good at' ek fixed preposition phrase hai."},
+    {q:"Antonym of 'Benevolent':",opts:["Kind","Generous","Malevolent","Charitable"],ans:2,exp:"Benevolent = kind/generous. Antonym = Malevolent (wishing harm)."},
+    {q:"'The pen is mightier than the sword' — yeh literary device kya hai?",opts:["Simile","Metaphor","Alliteration","Personification"],ans:1,exp:"Yeh ek metaphor hai — direct comparison 'like/as' ke bina."},
+    {q:"Passive voice of: 'She wrote a letter.'",opts:["A letter was written by her.","A letter is written by her.","A letter written by her.","A letter were written by her."],ans:0,exp:"Simple past passive: Object + was/were + past participle + by + subject."},
+    {q:"One word for 'a person who hates mankind':",opts:["Philanthropist","Misanthrope","Narcissist","Egoist"],ans:1,exp:"Misanthrope — ek aisi person jo manushyon se nafrat kare."},
+    {q:"Correct spelling choose karo:",opts:["Accomodation","Accommodation","Acomodation","Acommodation"],ans:1,exp:"Sahi spelling hai Accommodation — double 'c' aur double 'm'."},
+    {q:"'The news is shocking.' — 'news' is grammatically:",opts:["Plural noun","Singular noun","Collective noun","Proper noun"],ans:1,exp:"'News' singular noun hai, isliye 'is' use hota hai, 'are' nahi."},
+    {q:"Correct preposition: 'The match starts ___ 5 PM ___ Sunday.'",opts:["at, on","in, at","on, in","at, in"],ans:0,exp:"Time ke liye 'at' (at 5 PM) aur day ke liye 'on' (on Sunday) use hota hai."}
+  ],
+  maths:[
+    {q:"√144 + √25 = ?",opts:["17","19","14","21"],ans:0,exp:"√144 = 12, √25 = 5. 12 + 5 = 17."},
+    {q:"Ek vastu ₹500 mein kharidi aur ₹600 mein bachi. Profit % kitna hai?",opts:["15%","20%","25%","10%"],ans:1,exp:"Profit = 100. Profit% = (100/500) × 100 = 20%."},
+    {q:"LCM of 12 and 18 = ?",opts:["36","24","48","72"],ans:0,exp:"12 = 2²×3, 18 = 2×3². LCM = 2²×3² = 36."},
+    {q:"Circle ki radius 7 cm hai. Area = ? (π = 22/7)",opts:["144 cm²","154 cm²","164 cm²","134 cm²"],ans:1,exp:"Area = πr² = (22/7) × 49 = 154 cm²."},
+    {q:"2x + 5 = 15 mein x = ?",opts:["4","5","6","3"],ans:1,exp:"2x = 10, x = 5."},
+    {q:"SI: P=₹1000, R=5%, T=2 years. SI = ?",opts:["₹50","₹100","₹150","₹200"],ans:1,exp:"SI = (P×R×T)/100 = (1000×5×2)/100 = ₹100."},
+    {q:"Triangle ke angles 60°, 70°, x°. x = ?",opts:["40°","50°","60°","55°"],ans:1,exp:"180 - 60 - 70 = 50°."},
+    {q:"(-3)³ = ?",opts:["9","-9","27","-27"],ans:3,exp:"(-3)³ = -27."},
+    {q:"0.25 ka fraction form = ?",opts:["1/5","1/4","1/3","2/5"],ans:1,exp:"0.25 = 25/100 = 1/4."},
+    {q:"Rectangle: length 8 cm, width 5 cm. Perimeter = ?",opts:["26 cm","13 cm","40 cm","20 cm"],ans:0,exp:"Perimeter = 2×(8+5) = 26 cm."}
+  ]
+};
+
+const SUBJ_NAMES = { general:'General Test', english:'English Language', maths:'Mathematics' };
+
+let qs=[], curr=0, answers=[], skipped=[], timer=null, timeLeft=600, subj='general';
+
+function selectSubj(el, s) {
+  document.querySelectorAll('.subj-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  subj = s;
+}
+
+function startTest() {
+  qs = QB[subj];
+  answers = new Array(qs.length).fill(-1);
+  skipped = new Array(qs.length).fill(false);
+  curr = 0; timeLeft = 600;
+  show('testScreen');
+  buildPalette(); renderQ(); startTimer();
+}
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startTimer() {
+  clearInterval(timer);
+  timer = setInterval(()=>{
+    timeLeft--;
+    let m=Math.floor(timeLeft/60), s=timeLeft%60;
+    document.getElementById('timerDisplay').textContent = m+':'+(s<10?'0':'')+s;
+    let tp = document.getElementById('timerPill');
+    if(timeLeft<=60) tp.classList.add('warn'); else tp.classList.remove('warn');
+    if(timeLeft<=0){clearInterval(timer);submitTest();}
+  },1000);
+}
+
+function buildPalette() {
+  let p = document.getElementById('paletteBtns'); p.innerHTML='';
+  qs.forEach((_,i)=>{
+    let b = document.createElement('button');
+    b.className = 'pq' + (i===curr?' curr':answers[i]>=0?' ans':skipped[i]?' skip':'');
+    b.textContent = i+1;
+    b.onclick = ()=>{curr=i;renderQ();};
+    p.appendChild(b);
+  });
+}
+
+function renderQ() {
+  let q = qs[curr];
+  let pct = Math.round(((curr+1)/qs.length)*100);
+  document.getElementById('qNum').textContent = 'Q'+String(curr+1).padStart(2,'0')+' / '+qs.length;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progLabel').textContent = 'Question '+(curr+1)+' of '+qs.length;
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('pbarFill').style.width = pct+'%';
+  let oc = document.getElementById('optsContainer'); oc.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    let b = document.createElement('button');
+    b.className = 'opt'+(answers[curr]===i?' selected':'');
+    b.innerHTML = '<span class="opt-key">'+['A','B','C','D'][i]+'</span><span>'+o+'</span>';
+    b.onclick = ()=>{ answers[curr]=i; skipped[curr]=false; buildPalette(); renderQ(); };
+    oc.appendChild(b);
+  });
+  buildPalette();
+}
+
+function nextQ(){if(curr<qs.length-1){curr++;renderQ();}}
+function prevQ(){if(curr>0){curr--;renderQ();}}
+function skipQ(){skipped[curr]=true; answers[curr]=-1; buildPalette(); if(curr<qs.length-1){curr++;renderQ();}}
+
+function confirmSubmit() {
+  let done = answers.filter(a=>a>=0).length;
+  if(done<qs.length && !confirm('Abhi '+done+'/'+qs.length+' questions attempt kiye hain. Phir bhi submit karein?')) return;
+  submitTest();
+}
+
+function submitTest() {
+  clearInterval(timer);
+  let correct=0, wrong=0, skip=0, score=0;
+  qs.forEach((q,i)=>{
+    if(answers[i]<0) skip++;
+    else if(answers[i]===q.ans){correct++;score+=5;}
+    else{wrong++;score-=1;}
+  });
+  document.getElementById('rScoreNum').textContent = score;
+  document.getElementById('rScoreMax').textContent = 'out of '+(qs.length*5)+' marks';
+  document.getElementById('rCorrect').textContent = correct;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rSkip').textContent = skip;
+  document.getElementById('resultSubLabel').textContent = SUBJ_NAMES[subj]+' · '+qs.length+' Questions · CUET Pattern';
+  let acc = correct>0?Math.round((correct/qs.length)*100):0;
+  document.getElementById('rAccPct').textContent = acc+'%';
+  setTimeout(()=>{ document.getElementById('rAccBar').style.width=acc+'%'; },100);
+
+  let rl = document.getElementById('reviewList'); rl.innerHTML='';
+  qs.forEach((q,i)=>{
+    let st = answers[i]<0?'s':answers[i]===q.ans?'c':'w';
+    let d = document.createElement('div'); d.className='rq';
+    let badge = st==='c'?'<span class="rbadge c">✓ Sahi</span>':st==='w'?'<span class="rbadge w">✗ Galat</span>':'<span class="rbadge s">– Skip</span>';
+    let html = '<div class="rq-top"><div class="rq-q"><strong>Q'+(i+1)+'.</strong> '+q.q+'</div>'+badge+'</div>';
+    if(st!=='s'){
+      if(st==='w') html+='<div class="rq-ans">Tumhara jawab: <span class="wrong">'+q.opts[answers[i]]+'</span></div>';
+      html+='<div class="rq-ans">Sahi jawab: <span class="correct">'+q.opts[q.ans]+'</span></div>';
+    }
+    html+='<div class="rq-exp">'+q.exp+'</div>';
+    d.innerHTML=html; rl.appendChild(d);
+  });
+  show('resultScreen');
+}
+
+function goHome(){clearInterval(timer);show('homeScreen');}
+
+function shareScore(){
+  let score=document.getElementById('rScoreNum').textContent;
+  let text='Maine Mr MOCK pe '+SUBJ_NAMES[subj]+' mock test diya! Score: '+score+' marks. Tum bhi practice karo!';
+  if(navigator.share){navigator.share({title:'Mr MOCK Score',text:text});}
+  else{navigator.clipboard.writeText(text).then(()=>alert('Score copy ho gaya! Paste karke share karo.'));}
+}
+</script>
+</body>
+</html>
