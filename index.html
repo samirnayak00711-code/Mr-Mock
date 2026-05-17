@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr MOCK — Free CUET Mock Tests for Commerce Students</title>
+<meta name="description" content="India's best free CUET mock test platform. Practice Business Studies, Accountancy, Economics, English and General Test with real exam pattern.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f0f0f;--ink2:#2a2a2a;--muted:#6b6b6b;--border:#e4e4e4;--bg:#fafafa;--white:#ffffff;--accent:#1a56db;--accent-light:#eff6ff;--accent-dim:#bfdbfe;--green:#059669;--green-light:#ecfdf5;--red:#dc2626;--red-light:#fef2f2;--amber:#d97706;--amber-light:#fffbeb;--shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);--shadow-lg:0 8px 32px rgba(0,0,0,.10)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+.screen{display:none}
+.screen.active{display:block}
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:800;color:var(--ink)}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:14px;color:var(--muted);text-decoration:none;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:var(--accent);color:#fff;padding:9px 20px;border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s}
+.nav-cta:hover{opacity:.9}
+/* HERO */
+.hero{max-width:1100px;margin:0 auto;padding:80px 24px 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:768px){.hero{grid-template-columns:1fr;padding:48px 20px 40px;gap:40px}}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;margin-bottom:20px;border:1px solid var(--accent-dim);letter-spacing:.04em}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,52px);font-weight:800;line-height:1.1;letter-spacing:-1px;color:var(--ink);margin-bottom:18px}
+.hero h1 span{color:var(--accent)}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.7;max-width:420px;margin-bottom:32px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.btn-hero{background:var(--accent);color:#fff;padding:13px 28px;border-radius:10px;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn-hero:hover{background:#1544b8;transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,86,219,.3)}
+.btn-out{background:transparent;color:var(--ink);padding:13px 24px;border-radius:10px;font-size:15px;font-weight:600;border:1.5px solid var(--border);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-out:hover{border-color:var(--ink)}
+.hero-stats{display:flex;gap:28px;flex-wrap:wrap}
+.hero-stat .num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--ink)}
+.hero-stat .lbl{font-size:12px;color:var(--muted);font-weight:500}
+/* HERO CARD */
+.hero-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow-lg)}
+.hc-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.hc-title{font-size:13px;font-weight:600;color:var(--ink)}
+.hc-timer{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);background:var(--accent-light);padding:4px 10px;border-radius:6px}
+.hc-q{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:16px}
+.hc-opts{display:flex;flex-direction:column;gap:8px}
+.hc-opt{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--ink2);display:flex;gap:10px;align-items:center}
+.hc-opt.sel{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:500}
+.hc-key{width:22px;height:22px;border-radius:5px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.hc-opt.sel .hc-key{background:var(--accent);border-color:var(--accent);color:#fff}
+.hc-progress{margin-top:14px}
+.hc-prog-txt{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.hc-prog-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.hc-prog-fill{height:100%;width:40%;background:var(--accent);border-radius:2px}
+/* FEATURES */
+.features{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 24px}
+.features-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:12px;font-weight:600;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);font-weight:700;color:var(--ink);margin-bottom:48px;line-height:1.2}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.feat-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:24px;transition:box-shadow .2s,transform .2s}
+.feat-card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px}
+.feat-title{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6}
+/* SUBJECTS */
+.subjects{padding:72px 24px;max-width:1100px;margin:0 auto}
+.subj-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px;margin-top:40px}
+.subj-card-hp{background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;text-align:left}
+.subj-card-hp:hover{border-color:var(--accent);box-shadow:var(--shadow);transform:translateY(-2px)}
+.subj-card-hp.selected{border-color:var(--accent);background:var(--accent-light)}
+.subj-emoji{font-size:28px;margin-bottom:12px;display:block}
+.subj-card-name{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.subj-card-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.subj-card-meta{margin-top:12px;font-size:11px;font-weight:600;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.subj-cta{margin-top:32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.subj-info{font-size:13px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+/* STATS */
+.stats-band{background:var(--accent);padding:48px 24px}
+.stats-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px}
+.stat-item{text-align:center}
+.stat-num{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:#fff;line-height:1}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,.75);margin-top:6px}
+/* TESTIMONIALS */
+.testimonials{padding:72px 24px;background:var(--white);border-top:1px solid var(--border)}
+.testi-inner{max-width:1100px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:40px}
+.testi-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:24px}
+.testi-stars{color:#f59e0b;font-size:14px;margin-bottom:12px}
+.testi-text{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:16px}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:var(--accent);flex-shrink:0}
+.testi-name{font-size:13px;font-weight:600;color:var(--ink)}
+.testi-role{font-size:11px;color:var(--muted)}
+/* CTA */
+.cta-section{padding:80px 24px;text-align:center}
+.cta-box{max-width:540px;margin:0 auto;background:var(--white);border:1px solid var(--border);border-radius:20px;padding:48px 36px;box-shadow:var(--shadow-lg)}
+.cta-box h2{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.cta-box p{font-size:15px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.cta-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.cta-chip{font-size:12px;color:var(--green);background:var(--green-light);border:1px solid #a7f3d0;padding:4px 12px;border-radius:20px;font-weight:500}
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.6);padding:40px 24px;text-align:center}
+.footer-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:8px}
+.footer-logo span{color:var(--accent-dim)}
+footer p{font-size:13px;margin-bottom:16px}
+.footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none}
+.footer-links a:hover{color:#fff}
+/* TEST NAV */
+.test-nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.test-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:800;color:var(--ink)}
+.test-logo span{color:var(--accent)}
+.timer-wrap{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:500;background:var(--accent-light);color:var(--accent);padding:7px 16px;border-radius:8px;border:1px solid var(--accent-dim)}
+.timer-wrap.warn{background:var(--red-light);color:var(--red);border-color:#fca5a5}
+.timer-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1s infinite}
+.timer-wrap.warn .timer-dot{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* TEST LAYOUT */
+.test-layout{display:grid;grid-template-columns:1fr 260px;max-width:1060px;margin:0 auto;padding:20px;gap:16px;min-height:calc(100vh - 60px)}
+@media(max-width:700px){.test-layout{grid-template-columns:1fr}.palette-col{order:-1}}
+.main-col{display:flex;flex-direction:column;gap:14px}
+.progress-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px}
+.progress-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.prog-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
+.question-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:28px;box-shadow:var(--shadow)}
+.q-label{font-size:11px;font-weight:600;color:var(--accent);letter-spacing:.06em;margin-bottom:12px;font-family:'JetBrains Mono',monospace}
+.q-text{font-size:16px;color:var(--ink);line-height:1.7;margin-bottom:24px;font-weight:500}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;padding:13px 18px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;background:var(--bg);text-align:left;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink2);width:100%;transition:all .15s}
+.opt:hover{border-color:var(--accent);background:var(--accent-light)}
+.opt.selected{border-color:var(--accent);background:var(--accent-light);color:var(--accent);font-weight:500}
+.opt.correct{border-color:var(--green);background:var(--green-light);color:var(--green);font-weight:500}
+.opt.wrong{border-color:var(--red);background:var(--red-light);color:var(--red);font-weight:500}
+.opt-key{width:28px;height:28px;border-radius:7px;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0;color:var(--muted);transition:all .15s}
+.opt.selected .opt-key{background:var(--accent);border-color:var(--accent);color:#fff}
+.opt.correct .opt-key{background:var(--green);border-color:var(--green);color:#fff}
+.opt.wrong .opt-key{background:var(--red);border-color:var(--red);color:#fff}
+.nav-row{display:flex;gap:10px;justify-content:space-between}
+.btn{padding:10px 20px;border:1.5px solid var(--border);border-radius:9px;background:var(--white);color:var(--ink);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .15s}
+.btn:hover{background:var(--bg)}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-accent:hover{background:#1544b8}
+.btn-skip{color:var(--amber);border-color:#fde68a}
+.btn-skip:hover{background:var(--amber-light)}
+.btn-danger{background:var(--red-light);color:var(--red);border-color:#fca5a5}
+.btn-danger:hover{background:#fee2e2}
+/* PALETTE */
+.palette-col{display:flex;flex-direction:column;gap:14px}
+.palette-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;position:sticky;top:76px}
+.palette-title{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.palette-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:14px}
+.pq{aspect-ratio:1;border-radius:7px;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-weight:500}
+.pq.ans{background:var(--green-light);border-color:var(--green);color:var(--green)}
+.pq.curr{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.pq.skip{background:var(--amber-light);border-color:#fcd34d;color:var(--amber)}
+.legend{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
+.leg{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+/* RESULT */
+.result-wrap{max-width:720px;margin:0 auto;padding:32px 20px}
+.result-hero{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:40px;text-align:center;margin-bottom:20px;box-shadow:var(--shadow)}
+.result-emoji{font-size:48px;margin-bottom:16px}
+.result-score{font-family:'Playfair Display',serif;font-size:70px;font-weight:800;color:var(--accent);line-height:1;margin-bottom:6px}
+.result-max{font-size:14px;color:var(--muted);margin-bottom:24px}
+.acc-wrap{max-width:300px;margin:0 auto}
+.acc-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+.acc-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.acc-fill{height:100%;background:var(--accent);border-radius:4px;transition:width 1.2s ease}
+.result-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.rs{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center}
+.rs-val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700}
+.rs-lbl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:500}
+.rs.g .rs-val{color:var(--green)}
+.rs.r .rs-val{color:var(--red)}
+.rs.a .rs-val{color:var(--amber)}
+.review-section{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px}
+.review-section h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.rq{border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px}
+.rq:last-child{margin-bottom:0}
+.rq-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.rq-q{font-size:13px;color:var(--ink);line-height:1.5;flex:1;font-weight:500}
+.rbadge{font-size:11px;padding:3px 10px;border-radius:20px;font-family:'JetBrains Mono',monospace;flex-shrink:0;font-weight:600}
+.rbadge.c{background:var(--green-light);color:var(--green)}
+.rbadge.w{background:var(--red-light);color:var(--red)}
+.rbadge.s{background:var(--amber-light);color:var(--amber)}
+.rq-ans{font-size:12px;color:var(--muted);margin-bottom:3px}
+.rq-ans .c{color:var(--green);font-weight:600}
+.rq-ans .w{color:var(--red);font-weight:600}
+.rq-exp{font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:8px;margin-top:6px}
+.result-actions{display:flex;gap:10px}
+.result-actions .btn{flex:1;padding:13px;text-align:center;font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+
+<div id="homeScreen" class="screen active">
+  <nav class="nav">
+    <div class="nav-logo">Mr <span>MOCK</span></div>
+    <div class="nav-links"><a href="#subjects">Subjects</a><a href="#features">Features</a><a href="#testimonials">Reviews</a></div>
+    <button class="nav-cta" onclick="scrollToSubjects()">Start Free Test</button>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="hero-tag">&#9679; India's Free CUET Practice Platform</div>
+      <h1>Crack CUET with <span>Confidence</span></h1>
+      <p class="hero-sub">Full-length mock tests in exact CUET pattern. Business Studies, Accountancy, Economics, English & General Test — all free, forever.</p>
+      <div class="hero-btns">
+        <button class="btn-hero" onclick="scrollToSubjects()">Start Free Test →</button>
+        <a href="#features" class="btn-out">See Features</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">250+</div><div class="lbl">Questions</div></div>
+        <div class="hero-stat"><div class="num">5</div><div class="lbl">Subjects</div></div>
+        <div class="hero-stat"><div class="num">100%</div><div class="lbl">Free</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="hero-card">
+        <div class="hc-header"><div class="hc-title">Business Studies — Mock #1</div><div class="hc-timer">⏱ 38:24</div></div>
+        <div class="hc-q">Q20. Henri Fayol gave how many principles of management?</div>
+        <div class="hc-opts">
+          <div class="hc-opt"><div class="hc-key">A</div>10 Principles</div>
+          <div class="hc-opt"><div class="hc-key">B</div>12 Principles</div>
+          <div class="hc-opt sel"><div class="hc-key">C</div>14 Principles</div>
+          <div class="hc-opt"><div class="hc-key">D</div>16 Principles</div>
+        </div>
+        <div class="hc-progress">
+          <div class="hc-prog-txt"><span>Question 20 of 50</span><span>40%</span></div>
+          <div class="hc-prog-bar"><div class="hc-prog-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="features-inner">
+      <div class="section-label">Why Mr MOCK?</div>
+      <div class="section-title">Everything you need to ace your CUET exam</div>
+      <div class="features-grid">
+        <div class="feat-card"><div class="feat-icon">⏱</div><div class="feat-title">Real Exam Timer</div><div class="feat-desc">45-minute countdown with warning alerts — exactly like the actual CUET exam environment.</div></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><div class="feat-title">Detailed Score Analysis</div><div class="feat-desc">Question-wise review with correct answers and explanations after every test.</div></div>
+        <div class="feat-card"><div class="feat-icon">🎯</div><div class="feat-title">CUET Pattern</div><div class="feat-desc">Questions strictly follow the NTA CUET syllabus and marking scheme (+5, −1).</div></div>
+        <div class="feat-card"><div class="feat-icon">📱</div><div class="feat-title">Mobile Friendly</div><div class="feat-desc">Practice anywhere on your phone — fully responsive and optimised for all screen sizes.</div></div>
+        <div class="feat-card"><div class="feat-icon">🧭</div><div class="feat-title">Question Navigator</div><div class="feat-desc">Jump between questions, skip and revisit, and track progress with our visual palette.</div></div>
+        <div class="feat-card"><div class="feat-icon">✅</div><div class="feat-title">Completely Free</div><div class="feat-desc">No sign-up. No hidden charges. All 5 subjects with 50 questions each — free forever.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="subjects" id="subjects">
+    <div class="section-label">Choose Your Subject</div>
+    <div class="section-title">5 Subjects. 50 Questions Each. Real CUET Pattern.</div>
+    <div class="subj-cards">
+      <div class="subj-card-hp selected" onclick="selectSubj(this,'general')"><span class="subj-emoji">🧠</span><div class="subj-card-name">General Test</div><div class="subj-card-desc">GK, Reasoning, Current Affairs, Quantitative Aptitude</div><div class="subj-card-meta">50 Qs · 45 Min · Free</div></div>
+      <div class="subj-card-hp" onclick="selectSubj(this,'english')"><span class="subj-emoji">📝</span><div class="subj-card-name">English Language</div><div class="subj-card-desc">Grammar, Vocabulary, Reading Comprehension, Idioms</div><div class="subj-card-meta">50 Qs · 45 Min · Free</div></div>
+      <div class="subj-card-hp" onclick="selectSubj(this,'bst')"><span class="subj-emoji">💼</span><div class="subj-card-name">Business Studies</div><div class="subj-card-desc">Management, Marketing, Finance, HRM, Consumer Protection</div><div class="subj-card-meta">50 Qs · 45 Min · Free</div></div>
+      <div class="subj-card-hp" onclick="selectSubj(this,'accountancy')"><span class="subj-emoji">📊</span><div class="subj-card-name">Accountancy</div><div class="subj-card-desc">Partnership, Company Accounts, Cash Flow, Ratios</div><div class="subj-card-meta">50 Qs · 45 Min · Free</div></div>
+      <div class="subj-card-hp" onclick="selectSubj(this,'economics')"><span class="subj-emoji">📈</span><div class="subj-card-name">Economics</div><div class="subj-card-desc">Micro, Macro, Indian Economy, Statistics</div><div class="subj-card-meta">50 Qs · 45 Min · Free</div></div>
+    </div>
+    <div class="subj-cta">
+      <button class="btn-hero" onclick="startTest()">Start Test Now →</button>
+      <div class="subj-info"><span>✅ +5 Correct</span><span>❌ −1 Wrong</span><span>⏭ No penalty for Skip</span></div>
+    </div>
+  </section>
+
+  <div class="stats-band">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">250+</div><div class="stat-lbl">Questions Available</div></div>
+      <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">Commerce Subjects</div></div>
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Free Forever</div></div>
+      <div class="stat-item"><div class="stat-num">NTA</div><div class="stat-lbl">CUET Pattern</div></div>
+    </div>
+  </div>
+
+  <section class="testimonials" id="testimonials">
+    <div class="testi-inner">
+      <div class="section-label">Student Reviews</div>
+      <div class="section-title">What our students say</div>
+      <div class="testi-grid">
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"The Business Studies questions are really on point with the CUET pattern. The explanations after each question helped me understand concepts better. Highly recommended!"</div><div class="testi-author"><div class="testi-avatar">P</div><div><div class="testi-name">Priya Sharma</div><div class="testi-role">CUET 2025 Aspirant · Delhi</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"I was looking for free CUET mock tests for Accountancy and Mr MOCK is the best I found. The timer makes it feel exactly like the real exam. My scores improved a lot!"</div><div class="testi-author"><div class="testi-avatar">R</div><div><div class="testi-name">Rohan Verma</div><div class="testi-role">Commerce Student · Mumbai</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-text">"Economics and General Test practice on Mr MOCK is excellent. The question navigator is very helpful. Best of all — it's completely free! Thank you Mr MOCK!"</div><div class="testi-author"><div class="testi-avatar">A</div><div><div class="testi-name">Ananya Singh</div><div class="testi-role">CUET Aspirant · Patna</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-box">
+      <div style="font-size:40px;margin-bottom:16px">🎯</div>
+      <h2>Ready to crack CUET?</h2>
+      <p>Start your free mock test right now. No sign-up required. No credit card. Just practice.</p>
+      <div class="cta-chips"><span class="cta-chip">✓ 100% Free</span><span class="cta-chip">✓ No Sign-up</span><span class="cta-chip">✓ Instant Results</span><span class="cta-chip">✓ CUET Pattern</span></div>
+      <button class="btn-hero" style="width:100%;justify-content:center;font-size:16px;padding:15px" onclick="scrollToSubjects()">Start Free Mock Test →</button>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">Mr <span>MOCK</span></div>
+    <p>India's free CUET mock test platform for Commerce students.</p>
+    <div class="footer-links"><a href="#subjects">Practice Tests</a><a href="#features">Features</a><a href="#testimonials">Reviews</a></div>
+    <p style="margin-top:20px;font-size:12px">© 2025 Mr MOCK. All rights reserved.</p>
+  </footer>
+</div>
+
+<div id="testScreen" class="screen">
+  <nav class="test-nav">
+    <div class="test-logo">Mr <span>MOCK</span></div>
+    <div class="timer-wrap" id="timerWrap"><span class="timer-dot"></span><span id="timerDisplay">45:00</span></div>
+    <button class="btn btn-danger" onclick="confirmSubmit()">Submit Test</button>
+  </nav>
+  <div class="test-layout">
+    <div class="main-col">
+      <div class="progress-card">
+        <div class="progress-top"><span id="progLabel">Question 1 of 50</span><span id="progPct">2%</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:2%"></div></div>
+      </div>
+      <div class="question-card">
+        <div class="q-label" id="qLabel">Q01 / 50</div>
+        <div class="q-text" id="qText"></div>
+        <div class="options" id="optsContainer"></div>
+      </div>
+      <div class="nav-row">
+        <button class="btn" onclick="prevQ()">← Previous</button>
+        <button class="btn btn-skip" onclick="skipQ()">Skip</button>
+        <button class="btn btn-accent" onclick="nextQ()">Next →</button>
+      </div>
+    </div>
+    <div class="palette-col">
+      <div class="palette-card">
+        <div class="palette-title">Question Navigator</div>
+        <div class="palette-grid" id="paletteBtns"></div>
+        <div class="legend">
+          <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Attempted</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--accent)"></div>Current</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--amber)"></div>Skipped</div>
+          <div class="leg"><div class="leg-dot" style="background:var(--border)"></div>Not visited</div>
+        </div>
+        <button class="btn btn-danger" style="width:100%;padding:10px;font-size:13px;font-weight:600" onclick="confirmSubmit()">⏹ Submit Test</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="resultScreen" class="screen">
+  <nav class="test-nav">
+    <div class="test-logo">Mr <span>MOCK</span></div>
+    <button class="btn btn-accent" onclick="goHome()">← Back to Home</button>
+  </nav>
+  <div class="result-wrap">
+    <div class="result-hero">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="result-score" id="rScore">0</div>
+      <div class="result-max" id="rMax">out of 250 marks</div>
+      <div class="acc-wrap">
+        <div class="acc-top"><span>Accuracy</span><span id="rAccPct">0%</span></div>
+        <div class="acc-bar"><div class="acc-fill" id="rAccBar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="result-stats">
+      <div class="rs g"><div class="rs-val" id="rCorrect">0</div><div class="rs-lbl">Correct</div></div>
+      <div class="rs r"><div class="rs-val" id="rWrong">0</div><div class="rs-lbl">Wrong</div></div>
+      <div class="rs a"><div class="rs-val" id="rSkip">0</div><div class="rs-lbl">Skipped</div></div>
+    </div>
+    <div class="review-section"><h3>Detailed Question Review</h3><div id="reviewList"></div></div>
+    <div class="result-actions">
+      <button class="btn" onclick="goHome()">← Home</button>
+      <button class="btn btn-accent" onclick="shareScore()">Share Score ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUBJ_NAMES={general:'General Test',english:'English Language',bst:'Business Studies',accountancy:'Accountancy',economics:'Economics'};
+const QB={
+general:[{q:"Who was the first Prime Minister of India?",opts:["Sardar Patel","Jawaharlal Nehru","Rajendra Prasad","B.R. Ambedkar"],ans:1,exp:"Jawaharlal Nehru served as India's first Prime Minister from 1947 to 1964."},{q:"'Satyamev Jayate' is taken from which scripture?",opts:["Rigveda","Bhagavad Gita","Mundaka Upanishad","Arthashastra"],ans:2,exp:"Satyamev Jayate is taken from the Mundaka Upanishad and is India's national motto."},{q:"Maximum strength of Rajya Sabha?",opts:["245","250","238","260"],ans:0,exp:"Maximum strength of Rajya Sabha is 250 — 238 elected and 12 nominated by the President."},{q:"India's first female IPS officer?",opts:["Kiran Bedi","Sushma Swaraj","Pratibha Patil","Indira Gandhi"],ans:0,exp:"Kiran Bedi became India's first female IPS officer in 1972."},{q:"Who wrote 'Sare Jahan Se Achha'?",opts:["Rabindranath Tagore","Muhammad Iqbal","Bankim Chandra","Faiz Ahmad Faiz"],ans:1,exp:"Muhammad Iqbal wrote this patriotic song in 1904."},{q:"Train at 60 km/h for 2 hours. Distance?",opts:["90 km","100 km","120 km","150 km"],ans:2,exp:"Distance = Speed × Time = 60 × 2 = 120 km."},{q:"Next number: 2, 6, 12, 20, 30, ?",opts:["40","42","44","48"],ans:1,exp:"Pattern: n×(n+1). So 6×7 = 42."},{q:"National fruit of India?",opts:["Banana","Mango","Guava","Pear"],ans:1,exp:"Mango is the national fruit of India."},{q:"How many High Courts in India (2024)?",opts:["21","25","24","28"],ans:1,exp:"As of 2024, India has 25 High Courts."},{q:"Who is 'Pawan Putra'?",opts:["Arjun","Bheem","Hanuman","Karna"],ans:2,exp:"Lord Hanuman is Pawan Putra — son of Vayu, the wind god."},{q:"Seconds in one hour?",opts:["360","3600","600","36000"],ans:1,exp:"1 hour = 60 × 60 = 3,600 seconds."},{q:"Largest state in India by area?",opts:["Maharashtra","Madhya Pradesh","Rajasthan","Uttar Pradesh"],ans:2,exp:"Rajasthan is India's largest state by area."},{q:"Average age of 5 people is 20. Total age?",opts:["25","100","80","50"],ans:1,exp:"Total = Average × Count = 20 × 5 = 100."},{q:"Olympic flag has how many rings?",opts:["4","5","6","7"],ans:1,exp:"5 rings represent the 5 continents."},{q:"Oldest High Court in India?",opts:["Bombay HC","Delhi HC","Calcutta HC","Madras HC"],ans:2,exp:"Calcutta High Court, established 1862, is the oldest."},{q:"Sells at 15% profit, CP=₹200. SP?",opts:["₹220","₹225","₹230","₹215"],ans:2,exp:"SP = 200 × 1.15 = ₹230."},{q:"LCM of 4 and 6?",opts:["12","24","8","6"],ans:0,exp:"LCM of 4 and 6 = 12."},{q:"India's longest railway platform?",opts:["Mumbai","Gorakhpur","New Delhi","Patna"],ans:1,exp:"Gorakhpur has the world's longest railway platform."},{q:"Who gave 'Do or Die' slogan?",opts:["Nehru","Bose","Gandhi","Tilak"],ans:2,exp:"Mahatma Gandhi — Quit India Movement 1942."},{q:"Smallest state in India by area?",opts:["Sikkim","Goa","Tripura","Manipur"],ans:1,exp:"Goa is the smallest state in India by area."},{q:"20% of a number is 50. Number?",opts:["100","200","250","400"],ans:2,exp:"Number = 50 × 100/20 = 250."},{q:"RBI headquarters?",opts:["New Delhi","Kolkata","Mumbai","Chennai"],ans:2,exp:"Reserve Bank of India is headquartered in Mumbai."},{q:"Elected seats in Lok Sabha?",opts:["542","543","545","550"],ans:1,exp:"Lok Sabha has 543 elected seats."},{q:"Sum of angles in a triangle?",opts:["90°","180°","270°","360°"],ans:1,exp:"Sum of all angles in a triangle = 180°."},{q:"Who gave 'Jai Hind' slogan?",opts:["Gandhi","Nehru","Subhas Chandra Bose","Bhagat Singh"],ans:2,exp:"Subhas Chandra Bose popularised this slogan."},{q:"National animal of India?",opts:["Lion","Cheetah","Tiger","Elephant"],ans:2,exp:"The Bengal Tiger is the national animal of India."},{q:"Rectangle 10cm × 6cm. Area?",opts:["32 cm²","60 cm²","48 cm²","16 cm²"],ans:1,exp:"Area = 10 × 6 = 60 cm²."},{q:"GST implemented in India on?",opts:["1 Jan 2017","1 July 2017","1 April 2017","15 Aug 2017"],ans:1,exp:"GST was implemented on 1 July 2017."},{q:"World's largest democracy?",opts:["USA","China","India","Russia"],ans:2,exp:"India is the world's largest democracy."},{q:"Pipe A: 6 hrs, Pipe B: 12 hrs. Together?",opts:["4 hours","3 hours","5 hours","2 hours"],ans:0,exp:"Rate = 1/6+1/12 = 1/4. Time = 4 hours."},{q:"Highest peak entirely in India?",opts:["Nanda Devi","K2","Kangchenjunga","Godwin-Austen"],ans:2,exp:"Kangchenjunga (8,586m) is highest within Indian territory."},{q:"ISRO headquarters?",opts:["Mumbai","New Delhi","Bengaluru","Hyderabad"],ans:2,exp:"ISRO is headquartered in Bengaluru."},{q:"Degrees in a full circle?",opts:["90","180","270","360"],ans:3,exp:"A complete revolution = 360 degrees."},{q:"Oldest Veda?",opts:["Samaveda","Yajurveda","Rigveda","Atharvaveda"],ans:2,exp:"Rigveda is the oldest of the four Vedas."},{q:"Red Fort is located in?",opts:["Agra","Jaipur","New Delhi","Lucknow"],ans:2,exp:"Red Fort is in New Delhi."},{q:"5! =?",opts:["25","60","100","120"],ans:3,exp:"5! = 5×4×3×2×1 = 120."},{q:"First census in India?",opts:["1872","1881","1891","1901"],ans:0,exp:"First census in India was in 1872."},{q:"Paise in one rupee?",opts:["10","50","100","1000"],ans:2,exp:"1 Rupee = 100 Paise."},{q:"World's largest ocean?",opts:["Atlantic","Indian","Arctic","Pacific"],ans:3,exp:"Pacific Ocean is the world's largest."},{q:"National sport of India?",opts:["Cricket","Hockey","Football","Kabaddi"],ans:1,exp:"Field Hockey is India's national sport."},{q:"90 km/h for 1.5 hours. Distance?",opts:["120 km","135 km","150 km","100 km"],ans:1,exp:"Distance = 90 × 1.5 = 135 km."},{q:"How many states in India?",opts:["27","28","29","30"],ans:1,exp:"India has 28 states and 8 Union Territories."},{q:"HCF of 12 and 18?",opts:["3","6","9","12"],ans:1,exp:"HCF of 12 and 18 = 6."},{q:"Salary ₹10,000 with 20% hike?",opts:["₹11,000","₹12,000","₹12,500","₹10,200"],ans:1,exp:"10,000 × 1.20 = ₹12,000."},{q:"India's largest container port?",opts:["Mumbai Port","Chennai Port","Kolkata Port","Nhava Sheva"],ans:3,exp:"Jawaharlal Nehru Port (Nhava Sheva) is India's largest container port."},{q:"NITI Aayog established in?",opts:["2014","2015","2016","2013"],ans:1,exp:"NITI Aayog established on 1 January 2015."},{q:"UNESCO full form?",opts:["United Nations Educational Scientific and Cultural Organization","United Nations Economic and Social Commission","Universal Nations Educational System","United Nations Environment Science Cultural Org"],ans:0,exp:"UNESCO = United Nations Educational, Scientific and Cultural Organization."},{q:"Mark-up 25%, discount 10%. Profit %?",opts:["10.5%","12.5%","15%","7.5%"],ans:1,exp:"CP=100, MP=125, SP=112.5. Profit=12.5%."},{q:"The 'Red Planet' is?",opts:["Venus","Jupiter","Mars","Saturn"],ans:2,exp:"Mars is called the Red Planet."},{q:"UPI stands for?",opts:["Unified Payment Interface","Universal Payment Interface","United Payment Integration","Unified Process Interface"],ans:0,exp:"UPI = Unified Payments Interface by NPCI."}],
+english:[{q:"Correct sentence:",opts:["She don't know.","She doesn't knows.","She doesn't know the answer.","She not know."],ans:2,exp:"Third person singular: 'doesn't' + base verb."},{q:"Synonym of 'Eloquent':",opts:["Silent","Fluent and persuasive","Angry","Confused"],ans:1,exp:"Eloquent = expressing ideas clearly and persuasively."},{q:"'He is good ___ mathematics.'",opts:["in","at","on","for"],ans:1,exp:"'Good at' is the correct preposition phrase."},{q:"Antonym of 'Benevolent':",opts:["Kind","Generous","Malevolent","Charitable"],ans:2,exp:"Malevolent = wishing harm — opposite of benevolent."},{q:"'The pen is mightier than the sword' — literary device?",opts:["Simile","Metaphor","Alliteration","Personification"],ans:1,exp:"Direct comparison without like/as = Metaphor."},{q:"Passive: 'She wrote a letter.'",opts:["A letter was written by her.","A letter is written by her.","A letter written by her.","A letter were written by her."],ans:0,exp:"Simple past passive = was/were + past participle."},{q:"One word for 'hates mankind':",opts:["Philanthropist","Misanthrope","Narcissist","Egoist"],ans:1,exp:"Misanthrope = person who dislikes humankind."},{q:"Correct spelling:",opts:["Accomodation","Accommodation","Acomodation","Acommodation"],ans:1,exp:"Accommodation — double 'c' and double 'm'."},{q:"'The news is shocking.' News is grammatically:",opts:["Plural noun","Singular noun","Collective noun","Proper noun"],ans:1,exp:"'News' is singular — takes 'is', not 'are'."},{q:"'Match starts ___ 5 PM ___ Sunday.'",opts:["at, on","in, at","on, in","at, in"],ans:0,exp:"'at' for time, 'on' for days."},{q:"'I ___ to Delhi yesterday.'",opts:["go","goes","went","gone"],ans:2,exp:"Past tense = 'went'."},{q:"Antonym of 'Verbose':",opts:["Talkative","Concise","Lengthy","Wordy"],ans:1,exp:"Verbose = too many words. Antonym = Concise."},{q:"'He ran lest he ___ miss the train.'",opts:["should","would","might","shall"],ans:0,exp:"'Lest' always followed by 'should'."},{q:"Plural of 'Phenomenon':",opts:["Phenomenons","Phenomenas","Phenomena","Phenomenes"],ans:2,exp:"Greek origin: Phenomenon → Phenomena."},{q:"Error: 'He is one of the best player in the team.'",opts:["He is","one of the","best player","in the team"],ans:2,exp:"After 'one of the', plural noun needed — 'players'."},{q:"Synonym of 'Laconic':",opts:["Talkative","Brief","Loud","Detailed"],ans:1,exp:"Laconic = using few words = Brief."},{q:"'I wish I ___ a millionaire.'",opts:["am","was","were","be"],ans:2,exp:"Subjunctive mood after 'wish' = 'were'."},{q:"'Bite the bullet' means:",opts:["Eat quickly","Endure difficulty bravely","Be angry","Run fast"],ans:1,exp:"Endure a painful situation with courage."},{q:"'Neither Ram nor Shyam ___ present.'",opts:["are","were","was","is"],ans:3,exp:"Verb agrees with nearer subject — 'Shyam is'."},{q:"Antonym of 'Frugal':",opts:["Thrifty","Economical","Extravagant","Careful"],ans:2,exp:"Frugal = economical. Antonym = Extravagant."},{q:"One word for 'fear of heights':",opts:["Claustrophobia","Acrophobia","Hydrophobia","Agoraphobia"],ans:1,exp:"Acrophobia = fear of heights."},{q:"'Despite ___ hard, he failed.'",opts:["to work","working","worked","work"],ans:1,exp:"After 'despite', use gerund (-ing form)."},{q:"Reported speech: He said, 'I am happy.'",opts:["He said he is happy.","He said he was happy.","He said he were happy.","He said he has happy."],ans:1,exp:"'am' becomes 'was' in reported speech."},{q:"Synonym of 'Ephemeral':",opts:["Permanent","Long-lasting","Short-lived","Strong"],ans:2,exp:"Ephemeral = lasting very short time = Short-lived."},{q:"'No sooner ___ he arrived than it rained.'",opts:["did","had","has","was"],ans:1,exp:"'No sooner...than' = past perfect 'had'."},{q:"'The committee ___ divided in their opinion.'",opts:["is","are","was","were"],ans:1,exp:"Members acting individually = plural 'are'."},{q:"Antonym of 'Gregarious':",opts:["Sociable","Friendly","Outgoing","Reclusive"],ans:3,exp:"Gregarious = sociable. Antonym = Reclusive."},{q:"'Break a leg' means:",opts:["Get injured","Good luck","Work hard","Give up"],ans:1,exp:"Good luck (theatre expression)."},{q:"'She has been working here ___ 2010.'",opts:["for","since","from","by"],ans:1,exp:"Specific time point → 'since'."},{q:"'Each of the boys ___ a pen.'",opts:["have","has","had a pens","have a pen"],ans:1,exp:"'Each' is singular — takes 'has'."},{q:"Synonym of 'Pernicious':",opts:["Beneficial","Harmful","Helpful","Neutral"],ans:1,exp:"Pernicious = causing harm = Harmful."},{q:"'The ship ___ when the storm hit.'",opts:["sails","sailed","was sailing","has sailed"],ans:2,exp:"Action in progress = past continuous."},{q:"One word for 'walks in sleep':",opts:["Insomniac","Somnambulist","Narcissist","Pessimist"],ans:1,exp:"Somnambulist = sleepwalker."},{q:"Antonym of 'Archaic':",opts:["Ancient","Modern","Old","Obsolete"],ans:1,exp:"Archaic = very old. Antonym = Modern."},{q:"'Had I known, I ___ helped.'",opts:["would have","will have","would","should"],ans:0,exp:"Third conditional: Had + V3 → would have + V3."},{q:"'Ameliorate' means:",opts:["To worsen","To improve","To ignore","To destroy"],ans:1,exp:"Ameliorate = to make something better."},{q:"'He is senior ___ me.'",opts:["than","from","to","of"],ans:2,exp:"Senior/Junior/Superior take 'to', not 'than'."},{q:"Synonym of 'Intrepid':",opts:["Fearful","Brave","Timid","Cowardly"],ans:1,exp:"Intrepid = fearless = Brave."},{q:"'The cattle ___ grazing.'",opts:["is","was","are","has"],ans:2,exp:"'Cattle' is always plural — takes 'are'."},{q:"'Government by the people' =",opts:["Autocracy","Monarchy","Democracy","Oligarchy"],ans:2,exp:"Democracy = rule by the people."},{q:"'He is ___ honest man.'",opts:["a","an","the","no article"],ans:1,exp:"'Honest' has silent 'h' (vowel sound) — use 'an'."},{q:"Antonym of 'Ambiguous':",opts:["Unclear","Vague","Clear","Doubtful"],ans:2,exp:"Ambiguous = unclear. Antonym = Clear."},{q:"'By hook or by crook' means:",opts:["Fishing","By any means possible","Honestly","With tools"],ans:1,exp:"By any means possible."},{q:"'I look forward to ___ you.'",opts:["see","seeing","seen","saw"],ans:1,exp:"After 'look forward to', use gerund (-ing)."},{q:"Synonym of 'Ubiquitous':",opts:["Rare","Present everywhere","Absent","Limited"],ans:1,exp:"Ubiquitous = found everywhere."},{q:"'The jury ___ reached a verdict.'",opts:["have","has","are","were"],ans:1,exp:"Jury as single body = singular 'has'."},{q:"'Burn the midnight oil' means:",opts:["Waste energy","Work late into the night","Be careless","Light candles"],ans:1,exp:"Work late into the night."},{q:"Antonym of 'Loquacious':",opts:["Talkative","Garrulous","Taciturn","Verbose"],ans:2,exp:"Loquacious = talkative. Antonym = Taciturn."},{q:"Correct sentence:",opts:["He has went.","He have gone.","He has gone to market.","He had went."],ans:2,exp:"Present perfect = has + past participle 'gone'."},{q:"One word for 'new to a profession':",opts:["Expert","Veteran","Novice","Master"],ans:2,exp:"Novice = a beginner."}],
+bst:[{q:"First function of management?",opts:["Organizing","Staffing","Planning","Controlling"],ans:2,exp:"Planning is the first function of management."},{q:"Father of Scientific Management?",opts:["Henry Fayol","F.W. Taylor","Elton Mayo","Peter Drucker"],ans:1,exp:"F.W. Taylor is the Father of Scientific Management."},{q:"Fayol's principles of management?",opts:["10","12","14","16"],ans:2,exp:"Henri Fayol gave 14 principles of management."},{q:"'Unity of Command' means:",opts:["One target","Orders from one superior only","One department","One employee"],ans:1,exp:"Receive orders from only one boss."},{q:"Traditional marketing mix P's?",opts:["4","5","6","7"],ans:0,exp:"4 P's: Product, Price, Place, Promotion."},{q:"Consumer rights under CP Act 2019?",opts:["5","6","7","8"],ans:1,exp:"6 consumer rights under Consumer Protection Act 2019."},{q:"Primary function of Stock Exchange?",opts:["Loans","Trading of securities","Collecting taxes","Insurance"],ans:1,exp:"Stock exchange = secondary market for securities."},{q:"SEBI stands for?",opts:["Securities and Exchange Board of India","Stock Exchange Bureau of India","Securities Evaluation Board of India","Stock Exchange Bank of India"],ans:0,exp:"SEBI = Securities and Exchange Board of India."},{q:"Example of formal communication?",opts:["Canteen talk","Official memo","Friends chatting","Rumour"],ans:1,exp:"Official memo = formal communication."},{q:"Most basic need in Maslow's Hierarchy?",opts:["Safety","Social","Physiological","Esteem"],ans:2,exp:"Physiological needs form the base of Maslow's pyramid."},{q:"What is transferred in delegation?",opts:["Responsibility","Authority","Accountability","Both A and B"],ans:1,exp:"Authority is delegated; accountability stays with delegator."},{q:"Span of control refers to?",opts:["Salary","Subordinates under one manager","Department size","Work hours"],ans:1,exp:"Span of control = number of subordinates directly under one manager."},{q:"NSE is located in?",opts:["Mumbai","Delhi","Kolkata","Chennai"],ans:0,exp:"National Stock Exchange is in Mumbai."},{q:"Brand loyalty relates to?",opts:["Production","Marketing","Finance","Staffing"],ans:1,exp:"Brand loyalty is a marketing concept."},{q:"External source of recruitment?",opts:["Promotion","Transfer","Campus recruitment","Demotion"],ans:2,exp:"Campus recruitment = external source."},{q:"MBO stands for?",opts:["Management By Objectives","Management By Organisation","Marketing Business Objectives","Modern Business Operations"],ans:0,exp:"MBO = Management By Objectives (Peter Drucker)."},{q:"Hawthorne Experiments conducted by?",opts:["F.W. Taylor","Henri Fayol","Elton Mayo","Maslow"],ans:2,exp:"Elton Mayo conducted the Hawthorne Experiments."},{q:"First step in controlling?",opts:["Corrective action","Measure performance","Setting standards","Compare performance"],ans:2,exp:"Controlling: Setting standards → Measuring → Comparing → Corrective action."},{q:"Transactional leadership is based on?",opts:["Vision","Reward and punishment","Employee empowerment","Democracy"],ans:1,exp:"Transactional = reward/punishment based on performance."},{q:"BSE stands for?",opts:["Bombay Stock Exchange","Bengal Stock Exchange","Business Stock Exchange","Bharat Stock Exchange"],ans:0,exp:"BSE = Bombay Stock Exchange — Asia's first stock exchange."},{q:"First stage of Product Life Cycle?",opts:["Growth","Maturity","Introduction","Decline"],ans:2,exp:"PLC: Introduction → Growth → Maturity → Decline."},{q:"Franchising is an example of?",opts:["Forward integration","Backward integration","Horizontal expansion","Diversification"],ans:2,exp:"Franchising = horizontal expansion."},{q:"DCDRC stands for?",opts:["District Consumer Dispute Redressal Commission","District Court Dispute Resolution Commission","District Consumer Demand Council","Direct Consumer Dispute Commission"],ans:0,exp:"DCDRC = District Consumer Dispute Redressal Commission."},{q:"Training vs Development difference?",opts:["No difference","Training = present job; Development = future","Development = present; Training = future","Same"],ans:1,exp:"Training = current job. Development = future roles."},{q:"Grapevine communication is?",opts:["Official","Informal/unofficial","Written","Downward"],ans:1,exp:"Grapevine = informal communication network."},{q:"Market segmentation means?",opts:["Finding markets","Dividing market into groups","Differentiating","Pricing"],ans:1,exp:"Dividing market into groups with common characteristics."},{q:"Main advantage of decentralisation?",opts:["Faster decisions","Better central control","Reduced accountability","Slower communication"],ans:0,exp:"Decentralisation = faster decisions at lower levels."},{q:"FMCG stands for?",opts:["Fast Moving Consumer Goods","First Moving Consumer Goods","Fast Market Consumer Goods","Frequent Moving Consumer Goods"],ans:0,exp:"FMCG = Fast Moving Consumer Goods."},{q:"Herzberg hygiene factor?",opts:["Achievement","Recognition","Salary","Responsibility"],ans:2,exp:"Hygiene factors include salary, job security, working conditions."},{q:"CSR refers to?",opts:["Maximising profit","Ethical responsibility to society","Paying taxes","Training"],ans:1,exp:"CSR = company's responsibility towards society."},{q:"Three objectives of advertising?",opts:["Inform, Persuade, Remind","Sell, Buy, Trade","Produce, Distribute, Consume","Plan, Organise, Control"],ans:0,exp:"Inform, Persuade, Remind."},{q:"Fayol's 'Esprit de Corps' means?",opts:["Individual performance","Team spirit","Competition","Discipline"],ans:1,exp:"Esprit de Corps = team spirit."},{q:"Primary vs Secondary market?",opts:["No difference","Primary = new securities; Secondary = existing","Secondary = new; Primary = existing","Same"],ans:1,exp:"Primary = new issue. Secondary = existing securities trading."},{q:"Job enrichment means?",opts:["Salary increase","Adding more responsibility","Hiring more","Increasing hours"],ans:1,exp:"Job enrichment = adding more responsibility and growth opportunities."},{q:"A mutual fund is?",opts:["Bank account","Pooled investment managed professionally","Insurance","Government scheme"],ans:1,exp:"Mutual fund = pooled investment managed by fund manager."},{q:"Primary role of PR?",opts:["Direct selling","Building company image","Manufacturing","Training"],ans:1,exp:"PR = managing company's public image."},{q:"First step in staffing?",opts:["Training","Selection","Recruitment","Manpower planning"],ans:3,exp:"Staffing: Manpower planning → Recruitment → Selection → Training."},{q:"Break-even point is?",opts:["Maximum profit","Revenue = total cost","Maximum loss","Minimum sales"],ans:1,exp:"Break-even = no profit, no loss point."},{q:"ISO certification indicates?",opts:["Company size","International quality standards","Government registration","Tax status"],ans:1,exp:"ISO = adherence to international quality standards."},{q:"Example of e-commerce?",opts:["Physical shop","Amazon and Flipkart","Factory","Warehouse"],ans:1,exp:"Amazon and Flipkart are e-commerce platforms."},{q:"Most effective leadership style?",opts:["Autocratic","Laissez-faire","Democratic/Participative","Bureaucratic"],ans:2,exp:"Democratic/Participative leadership is generally most effective."},{q:"Role of wholesaler?",opts:["Sells to consumers","Buys bulk from producers, sells to retailers","Acts as retailer","Manufactures"],ans:1,exp:"Wholesaler: Producer → Retailer (bulk)."},{q:"Why is motivation important?",opts:["Improves performance","Increases costs","Creates conflicts","Slows communication"],ans:0,exp:"Motivation improves employee performance."},{q:"'L' in PESTLE stands for?",opts:["Labour","Legal","Leadership","Logistics"],ans:1,exp:"PESTLE = Political, Economic, Social, Technological, Legal, Environmental."},{q:"A debenture holder is?",opts:["Owner","Creditor","Employee","Partner"],ans:1,exp:"Debenture holder = creditor of the company."},{q:"On-the-job training example?",opts:["Classroom","Role play","Apprenticeship","Seminar"],ans:2,exp:"Apprenticeship = learning while working."},{q:"Intrinsic motivational factor?",opts:["Salary","Bonus","Job satisfaction","Perks"],ans:2,exp:"Job satisfaction is an intrinsic motivational factor."},{q:"Working capital =?",opts:["Long-term assets","Current assets − current liabilities","Fixed assets","Total assets"],ans:1,exp:"Working Capital = Current Assets − Current Liabilities."},{q:"Niche marketing means?",opts:["Targeting mass market","Specific small segment","Global marketing","Online only"],ans:1,exp:"Niche = targeting a specific specialised segment."},{q:"BOT vs BOP difference?",opts:["No difference","BOT = goods only; BOP = goods + services + capital","BOP = goods only","Same"],ans:1,exp:"BOT = goods trade. BOP = all international transactions."}],
+accountancy:[{q:"Basic accounting equation?",opts:["Assets = Liabilities + Capital","Assets = Liabilities - Capital","Capital = Assets + Liabilities","Liabilities = Assets + Capital"],ans:0,exp:"Assets = Liabilities + Capital."},{q:"Double entry: every transaction affects?",opts:["One account","At least two accounts","Three accounts","No rule"],ans:1,exp:"Double entry = at least two accounts (debit and credit)."},{q:"Debit in asset account =?",opts:["Decrease","Increase","No effect","Depends"],ans:1,exp:"Debit increases assets (DEAD CLIC rule)."},{q:"Trial Balance is prepared to?",opts:["Find profit","Verify arithmetic accuracy","Calculate tax","Get loan"],ans:1,exp:"Trial Balance checks arithmetic accuracy of ledger accounts."},{q:"Goodwill is classified as?",opts:["Physical asset","Intangible asset","Current asset","Fictitious asset"],ans:1,exp:"Goodwill = intangible asset."},{q:"Under SLM, depreciation is?",opts:["Different each year","Equal each year","Higher initially","Lower initially"],ans:1,exp:"Straight Line Method = equal depreciation every year."},{q:"Without partnership deed, profit shared?",opts:["Capital ratio","Seniority","Equally","Per agreement"],ans:2,exp:"If deed silent, profit shared equally."},{q:"Goodwill (Avg Profit Method) =?",opts:["Avg Profit × Years Purchase","Total Profit / Years","Capital × Rate","Revenue − Expenses"],ans:0,exp:"Goodwill = Average Profit × Years of Purchase."},{q:"Revaluation Account credited when?",opts:["Assets decrease","Liabilities decrease","Assets increase","Expenses increase"],ans:2,exp:"Asset value increases → Credit Revaluation Account."},{q:"Securities Premium transferred to?",opts:["P&L Account","Capital Reserve","Revenue Reserve","Trading Account"],ans:1,exp:"Share premium = Capital Reserve."},{q:"Operating activity in Cash Flow?",opts:["Buy machinery","Issue shares","Pay salaries","Repay loan"],ans:2,exp:"Salary payment = operating activity."},{q:"Current Ratio formula?",opts:["CA / CL","CL / CA","Total Assets / Total Liabilities","Net Profit / Sales"],ans:0,exp:"Current Ratio = Current Assets / Current Liabilities. Ideal = 2:1."},{q:"Interest on debentures is?",opts:["Capital expenditure","Revenue expenditure","An asset","A liability"],ans:1,exp:"Interest on debentures = revenue expenditure."},{q:"Preference shareholders receive dividend?",opts:["After equity","Before equity","Simultaneously","Never"],ans:1,exp:"Preference shareholders have priority over equity shareholders."},{q:"Forfeiture of shares means?",opts:["Returning shares","Cancelling for non-payment","Issuing new","Transferring"],ans:1,exp:"Forfeiture = cancellation when calls not paid."},{q:"Sacrificing Ratio =?",opts:["Old − New","New − Old","Old + New","New / Old"],ans:0,exp:"Sacrificing Ratio = Old Ratio − New Ratio."},{q:"Gaining Ratio calculated at?",opts:["New partner admission","Retirement/death","Dissolution","Share issue"],ans:1,exp:"Gaining Ratio = New Ratio − Old Ratio (retirement/death)."},{q:"Provision for Bad Debts created for?",opts:["Increase profit","Anticipated losses","Save tax","Earn interest"],ans:1,exp:"Provision for Bad Debts = anticipated losses (Prudence Concept)."},{q:"Capital vs Revenue expenditure?",opts:["No difference","Capital = long-term asset; Revenue = period expense","Revenue = long-term","Same"],ans:1,exp:"Capital = long-term asset. Revenue = current period expense."},{q:"Going Concern concept assumes?",opts:["Closes in one year","Continues indefinitely","Winding up","Is profitable"],ans:1,exp:"Going Concern = business will continue operating indefinitely."},{q:"P&L Appropriation Account for?",opts:["Sales revenue","Distributing profit among partners","Operating expenses","Tax"],ans:1,exp:"P&L Appropriation = distributing profit (salary, interest, share)."},{q:"Inventory excluded from Quick Ratio because?",opts:["Most liquid","Least liquid current asset","Too valuable","Rule"],ans:1,exp:"Inventory is least liquid current asset."},{q:"Deferred Revenue Expenditure example?",opts:["Salary","Heavy advertising benefiting multiple years","Machinery","Land"],ans:1,exp:"Heavy advertising whose benefit extends beyond one year."},{q:"Shares at premium — journal entry?",opts:["Bank Dr, Share Capital Cr","Bank Dr; Share Capital Cr; Securities Premium Cr","Share Capital Dr, Bank Cr","Securities Premium Dr, Bank Cr"],ans:1,exp:"Bank Dr | Share Capital Cr | Securities Premium Reserve Cr."},{q:"Retiring partner receives?",opts:["Capital only","Capital + goodwill + revaluation + profits","Goodwill only","Nothing"],ans:1,exp:"Retiring partner = capital + goodwill + revaluation + accumulated profits."},{q:"Interest on capital paid to?",opts:["Statutory requirement","Compensate capital contribution","Government","Tax benefit"],ans:1,exp:"Compensates partners for use of their capital."},{q:"Depreciation based on which principle?",opts:["Consistency","Matching Principle","Cost Concept","Entity Concept"],ans:1,exp:"Depreciation = Matching Principle."},{q:"Dissolution of firm vs partnership?",opts:["No difference","Partnership = firm continues; Firm = business ends","Firm continues","Same"],ans:1,exp:"Partnership dissolution = constitution changes. Firm dissolution = business ends."},{q:"Calls in Arrears means?",opts:["Extra payment","Called amount not yet paid","Unpaid dividend","Unpaid interest"],ans:1,exp:"Calls in Arrears = called-up share capital not yet paid."},{q:"BRS reconciles?",opts:["Profit with tax","Cash book with bank statement","Revenue with expenses","Capital with liabilities"],ans:1,exp:"BRS reconciles cash book with bank passbook balance."},{q:"Accrual Concept states?",opts:["Record when cash received","Record when earned/incurred","Record only expenses","Tax on profit"],ans:1,exp:"Accrual = record when earned or incurred, not when cash flows."},{q:"Net Profit Ratio =?",opts:["NP / Sales × 100","Sales / NP × 100","GP / Sales × 100","NP / Total Assets × 100"],ans:0,exp:"Net Profit Ratio = Net Profit / Net Sales × 100."},{q:"Fixed Capital Method — capital account?",opts:["Changes yearly","Fixed; transactions in current account","Increases with profit","Decreases with loss"],ans:1,exp:"Fixed capital = constant; current account handles transactions."},{q:"In Realisation Account, assets on?",opts:["Credit side","Debit side","Both","Not recorded"],ans:1,exp:"Assets transferred at book value to debit side of Realisation Account."},{q:"FIFO stands for?",opts:["First In First Out","First In First Over","Final In First Out","Fixed Income First Out"],ans:0,exp:"FIFO = First In First Out."},{q:"Amortisation applies to?",opts:["Tangible assets","Intangible assets","Current assets","Fictitious assets"],ans:1,exp:"Amortisation = write-off of intangible assets."},{q:"Rights shares offered to?",opts:["General public","Existing shareholders preferentially","All investors","Government"],ans:1,exp:"Rights issue = new shares offered to existing shareholders first."},{q:"Outstanding expenses on balance sheet?",opts:["Asset side","Current Liability","P&L debit","Capital account"],ans:1,exp:"Outstanding expenses = current liability."},{q:"Debt-Equity Ratio =?",opts:["Total Debt / Shareholders' Equity","Equity / Debt","Total Assets / Equity","NP / Debt"],ans:0,exp:"Debt-Equity Ratio = Total Debt / Shareholders' Equity."},{q:"Shares at discount under Companies Act 2013?",opts:["Always permitted","Not permitted","Preference shares only","Private companies only"],ans:1,exp:"Shares at discount NOT permitted under Companies Act 2013."},{q:"Gross Profit in P&L comes from?",opts:["Cash Book","Trading Account","Balance Sheet","Capital Account"],ans:1,exp:"Gross Profit from Trading Account → transferred to P&L."},{q:"Inventory Turnover Ratio measures?",opts:["Inventory value","Efficiency of selling and replacing inventory","Total inventory","Location"],ans:1,exp:"Inventory Turnover = COGS / Average Inventory."},{q:"Endorsement of cheque means?",opts:["Cancel it","Sign back to transfer to another","Write new cheque","Deposit it"],ans:1,exp:"Endorsement = signing reverse to transfer payment rights."},{q:"Wasting asset example?",opts:["Building","Mines and quarries","Machinery","Land"],ans:1,exp:"Wasting assets deplete through use: mines, oil wells."},{q:"Goodwill (Super Profit Method) =?",opts:["Avg Profit × Years","(Actual − Normal Profit) × Years","Capital × Rate","Revenue − Expenses"],ans:1,exp:"Goodwill = Super Profit × Years of Purchase."},{q:"Contingent liability is?",opts:["Fixed liability","Possible obligation on uncertain event","Current liability","Long-term liability"],ans:1,exp:"Contingent = possible future obligation depending on uncertainty."},{q:"Book Value per Share =?",opts:["Net Assets / Number of Shares","Market Price / EPS","Dividend / Shares","Profit / Shares"],ans:0,exp:"Book Value = Shareholders' Net Assets / Number of Shares."},{q:"Interim dividend declared?",opts:["End of year","During year before final accounts","At AGM only","Never"],ans:1,exp:"Interim dividend declared by Board during the financial year."},{q:"Prepaid expenses on balance sheet?",opts:["Liability","Current Asset","P&L credit","Capital"],ans:1,exp:"Prepaid expenses = current asset."},{q:"Income and Expenditure Account by?",opts:["Business firms","Non-profit organisations","Partnership firms","Companies"],ans:1,exp:"Non-profit organisations prepare Income and Expenditure Account."}],
+economics:[{q:"Microeconomics studies?",opts:["Whole economy","Individual units — consumers, firms","National income","International trade"],ans:1,exp:"Microeconomics = study of individual economic units."},{q:"Law of Demand: price rises, quantity?",opts:["Increases","Decreases","Stays same","First rises then falls"],ans:1,exp:"Law of Demand = inverse relationship between price and quantity."},{q:"Price Elasticity of Demand measures?",opts:["Speed of demand","Responsiveness of QD to price change","Supply elasticity","Market size"],ans:1,exp:"PED = % change in QD / % change in Price."},{q:"In perfect competition, firm is a?",opts:["Price maker","Price taker","Price setter","Price negotiator"],ans:1,exp:"Perfect competition = firms are price takers."},{q:"Monopoly features?",opts:["Many sellers","Single seller, no close substitutes","Two sellers","Few sellers"],ans:1,exp:"Monopoly = single seller, no close substitutes, high entry barriers."},{q:"GDP stands for?",opts:["Gross Domestic Product","General Domestic Product","Gross Development Product","Global Domestic Production"],ans:0,exp:"GDP = total value produced within a country in a year."},{q:"Inflation is?",opts:["Fall in prices","Sustained rise in general price level","Fall in money supply","Fall in GDP"],ans:1,exp:"Inflation = sustained general increase in price levels."},{q:"Repo Rate is rate at which?",opts:["Banks lend to public","RBI lends to commercial banks","Banks lend each other","Govt issues bonds"],ans:1,exp:"Repo Rate = RBI's short-term lending rate to banks."},{q:"Fiscal policy uses?",opts:["Repo rate","Open market operations","Government spending and taxation","CRR"],ans:2,exp:"Fiscal policy = government spending and taxation."},{q:"Opportunity cost is?",opts:["Actual cost","Best alternative foregone","Total cost","Fixed cost"],ans:1,exp:"Opportunity cost = value of next best alternative sacrificed."},{q:"Market equilibrium when?",opts:["Demand > Supply","Supply > Demand","QD = QS","Price = 0"],ans:2,exp:"Equilibrium = quantity demanded equals quantity supplied."},{q:"Budget deficit when?",opts:["Revenue > Expenditure","Expenditure > Revenue","Revenue = Expenditure","No borrowing"],ans:1,exp:"Budget deficit = expenditure exceeds revenue."},{q:"WTO primary function?",opts:["World peace","Regulate international trade","Climate change","Currency regulation"],ans:1,exp:"WTO = regulates and facilitates international trade."},{q:"Multiplier effect means?",opts:["Investment decreases","Initial spending → larger income change","Taxes increase","Employment falls"],ans:1,exp:"Multiplier = initial spending causes proportionally larger income change."},{q:"Supply curve shifts right when?",opts:["Input costs rise","Technology improves","Taxes increase","Producers decrease"],ans:1,exp:"Supply increases when technology improves or costs fall."},{q:"Consumer surplus =?",opts:["Actual price","Willingness to pay − actual price","Producer profit","Market price"],ans:1,exp:"Consumer Surplus = Max willingness to pay − Actual price."},{q:"Stagflation means?",opts:["High growth + high inflation","Stagnant growth + high inflation","Deflation + unemployment","High growth + low prices"],ans:1,exp:"Stagflation = stagnant growth + high inflation simultaneously."},{q:"Income Method for NI?",opts:["GDP = C+I+G+NX","Wages + Rent + Interest + Profit","Output − Intermediate","Final expenditure"],ans:1,exp:"Income Method = sum of all factor incomes."},{q:"CRR stands for?",opts:["Cash Reserve Ratio","Credit Reserve Ratio","Currency Reserve Rate","Central Reserve Ratio"],ans:0,exp:"CRR = Cash Reserve Ratio."},{q:"Comparative vs Absolute Advantage?",opts:["No difference","Absolute = fewer resources; Comparative = lower opportunity cost","Comparative = more efficient","Absolute = trade only"],ans:1
